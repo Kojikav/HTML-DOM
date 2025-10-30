@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>my To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+    .meta {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #555;
+      text-align: center;
+    }
+    .container {
+      background: #fbfcfd;
+      padding: 20px;
+      border: 4px solid #8833de;
+      border-radius: 6px;
+      width: 320px;
+      box-shadow: #00000033 10px 10px 10px;
+    }
+    h2 {
+      text-align: center;
+    }
+    input {
+      width: 70%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 6px 10px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+    }
+    li span {
+      cursor: pointer;
+      flex: 1;
+      margin-right: 10px;
+    }
+    li span.done {
+      text-decoration: line-through;
+      color: rgb(14, 6, 6);
+    }
+    .btn {
+      margin-left: 5px;
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 4px;
+    }
+    .btn-del {
+      background: #f30a21;
+    }
+    .btn-edit {
+      background: #e6802d;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>To-Do List</h2>
+    <input type="text" id="taskInput" placeholder="Masukkan tugas...">
+    <button onclick="addTask()">Tambah</button>
+    <ul id="taskList"></ul>
+    <div class="meta">klik task untuk centang</div>
+  </div>
+
+
+  <script>
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const text = input.value.trim();
+      if (text === "") return;
+
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = text;
+
+      span.onclick = function() {
+        span.classList.toggle("done");
+      };
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.className = "btn btn-edit";
+      editBtn.onclick = function() {
+        if (editBtn.textContent === "Edit") {
+          const inputEdit = document.createElement("input");
+          inputEdit.type = "text";
+          inputEdit.value = span.textContent;
+          li.insertBefore(inputEdit, span);
+          li.removeChild(span);
+          editBtn.textContent = "Save";
+
+          inputEdit.focus();
+        } else {
+          const inputEdit = li.querySelector("input");
+          const newSpan = document.createElement("span");
+          newSpan.textContent = inputEdit.value.trim() || "Untitled task";
+
+          newSpan.onclick = function() {
+            newSpan.classList.toggle("done");
+          };
+
+          li.insertBefore(newSpan, inputEdit);
+          li.removeChild(inputEdit);
+          editBtn.textContent = "Edit";
+        }
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Delete";
+      delBtn.className = "btn btn-del";
+      delBtn.onclick = function() {
+        li.remove();
+      };
+
+      li.appendChild(span);
+      li.appendChild(editBtn);
+      li.appendChild(delBtn);
+
+      document.getElementById("taskList").appendChild(li);
+      input.value = "";
+    }
+  </script>
+
+</body>
+</html>
